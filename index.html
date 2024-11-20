@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoFilterGPT API Example</title>
+</head>
+<body>
+
+    <h1>NoFilterGPT API with Vanilla JS</h1>
+    
+    <label for="user-input">Ask a question:</label>
+    <input type="text" id="user-input" placeholder="Type your question here" />
+    <button id="get-response">Get Response</button>
+
+    <h2>Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        // CHANGE THIS VALUE HERE
+        const apiKey = 'ZGUycllsUzljblZtZGFqQzhraklxYjZqd3NBMg';
+
+        document.getElementById('get-response').addEventListener('click', () => {
+            const userQuestion = document.getElementById('user-input').value;
+            if (!userQuestion) {
+                alert("Please enter a question.");
+                return;
+            }
+
+            const url = `https://api.nofiltergpt.com/v1/chat/completions?api_key=${apiKey}`;
+
+            const data = {
+                messages: [
+                    { role: "system", content: "You are a helpful assistant." },
+                    { role: "user", content: userQuestion }
+                ],
+                temperature: 0.7,
+                max_tokens: 150,
+                top_p: 1
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('response').innerText = JSON.stringify(result, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('response').innerText = 'Error fetching data';
+            });
+        });
+    </script>
+    
+</body>
+</html>
